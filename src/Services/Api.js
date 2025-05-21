@@ -1,21 +1,22 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL = 'https://product-orders-8.onrender.com';
+const API_URL = "https://product-orders-8.onrender.com";
 
-// Product APIs
-export const GetAllProducts = () => axios.get(`${API_URL}/getp`);
-export const CreateProduct = (product) => axios.post(`${API_URL}/postp`, product);
-
-// Order APIs (Updated paths)
-export const GetAllOrders = () => axios.get(`${API_URL}/getorder`);
-export const CreateOrder = (order) => axios.post(`${API_URL}/postorder`, order);
-export const GetOrderById = (id) => axios.get(`${API_URL}/getbyid/${id}`);
-
-// Axios Instance (for global headers if needed)
+// Create a reusable Axios instance with proper headers
 export const axiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
-    'Content-Type': 'application/json',
-    // 'Authorization': `Bearer ${API_KEY}` // Uncomment if API key is required
-  }
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  },
 });
+
+// Product APIs
+export const GetAllProducts = () => axiosInstance.get("/getp");
+export const CreateProduct = (product) => axiosInstance.post("/postp", product);
+
+// Order APIs
+export const GetAllOrders = () => axiosInstance.get("/getorder");
+export const CreateOrder = (order) => axiosInstance.post("/postorder", order);
+export const GetOrderById = (id) => axiosInstance.get(`/getbyid/${id}`);
