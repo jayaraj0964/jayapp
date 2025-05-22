@@ -1,25 +1,26 @@
+// src/App.js
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './Components/Navbar';
-import ProductForm from './Components/ProductForm';
-import OrderList from './Components/OrderList';
-import OrderForm from './Components/OrderForm';
-import OrderDetails from './Components/OrderDetails';
 import ProductList from './Components/ProductList';
+import OrderForm from './Components/OrderForm';
+import OrderList from './Components/OrderList';
+import OrderDetails from './Components/OrderDetails';
+import ProductForm from './Components/ProductForm';
+
 function App() {
   return (
     <Router>
       <Navbar />
       <Routes>
-        <Route path="/create-product" element={<ProductForm />} /> 
+        <Route path="/" element={<ProductList />} />
         <Route path="/products" element={<ProductList />} />
+        <Route path="/order-form" element={<OrderForm />} />
         <Route path="/orders" element={<OrderList />} />
         <Route path="/orders/:id" element={<OrderDetails />} />
-        <Route path="/create-order" element={<OrderForm />} />
-
+        <Route path="/create-product" element={<ProductForm />} />
       </Routes>
     </Router>
   );
 }
-//added urikanh
 
-export default App;
+export default App; // Ensure this export is present

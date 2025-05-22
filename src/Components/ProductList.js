@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { GetAllProducts, CreateOrder } from '../Services/Api';
 
 function ProductList() {
-  const [products, setProducts] = useState([]); // All available products
-  const [selectedProducts, setSelectedProducts] = useState([]); // Store selected product IDs
-  const [totalPrice, setTotalPrice] = useState(0); // Track total price dynamically
+  const [products, setProducts] = useState([]);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
     GetAllProducts()
@@ -13,13 +13,15 @@ function ProductList() {
   }, []);
 
   const handleSelect = (id, price) => {
-    setSelectedProducts((prev) =>
-      prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id]
-    );
-
-    setTotalPrice((prev) =>
-      selectedProducts.includes(id) ? prev - price : prev + price
-    );
+    setSelectedProducts((prev) => {
+      if (prev.includes(id)) {
+        setTotalPrice((prevPrice) => prevPrice - price);
+        return prev.filter((p) => p !== id);
+      } else {
+        setTotalPrice((prevPrice) => prevPrice + price);
+        return [...prev, id];
+      }
+    });
   };
 
   const handleCreateOrder = () => {
@@ -38,43 +40,46 @@ function ProductList() {
   };
 
   return (
-    <div className="container">
-      <h2>Select Products to Order</h2>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Select</th>
-            <th>Name</th>
-            <th>Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((product) => (
-            <tr key={product.id}>
-              <td>
-                <input
-                  type="checkbox"
-                  checked={selectedProducts.includes(product.id)}
-                  onChange={() => handleSelect(product.id, product.price)}
-                />
-              </td>
-              <td>{product.name}</td>
-              <td>${product.price}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="container mt-4">
+      <div className="card shadow-sm">
+        <div className="card-header bg-primary text-white">
+          <h2 className="mb-0">Select Products to Order</h2>
+        </div>
+        <div className="card-body">
+          <table className="table table-hover">
+            <thead>
+              <tr>
+                <th>Select</th>
+                <th>Name</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {products.map((product) => (
+                <tr key={product.id}>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedProducts.includes(product.id)}
+                      onChange={() => handleSelect(product.id, product.price)}
+                    />
+                  </td>
+                  <td>{product.name}</td>
+                  <td>${product.price.toFixed(2)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-      <h4>Total Price: <strong>${totalPrice.toFixed(2)}</strong></h4>
+          <h4>Total Price: <strong>${totalPrice.toFixed(2)}</strong></h4>
 
-      <button className="btn btn-primary" onClick={handleCreateOrder}>
-        🛒 Create Order
-      </button>
+          <button className="btn btn-primary" onClick={handleCreateOrder}>
+            🛒 Create Order
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
-
-
-
 
 export default ProductList;

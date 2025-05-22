@@ -9,23 +9,31 @@ function OrderDetails() {
   useEffect(() => {
     GetOrderById(id)
       .then((response) => setOrder(response.data))
-      .catch((error) => console.error('Error fetching order jay:', error));
+      .catch((error) => console.error('Error fetching order:', error));
   }, [id]);
 
-  if (!order) return <div>Loading...</div>;
+  if (!order) return <div className="text-center mt-5">Loading...</div>;
 
   return (
-    <div className="container">
-      <h2>Order Details</h2>
-      <p><strong>ID:</strong> {order.id}</p>
-      <p><strong>Date:</strong> {order.orderDate}</p>
-      <p><strong>Total Price:</strong> ${order.totalPrice}</p>
-      <h4>Products</h4>
-      <ul>
-        {order.products.map((product) => (
-          <li key={product.id}>{product.name} (${product.price})</li>
-        ))}
-      </ul>
+    <div className="container mt-4">
+      <div className="card shadow-sm">
+        <div className="card-header bg-primary text-white">
+          <h2 className="mb-0">Order Details</h2>
+        </div>
+        <div className="card-body">
+          <p><strong>ID:</strong> {order.id}</p>
+          <p><strong>Date:</strong> {new Date(order.orderDate).toLocaleDateString()}</p>
+          <p><strong>Total Price:</strong> ${order.totalPrice.toFixed(2)}</p>
+          <h4>Products</h4>
+          <ul className="list-group">
+            {order.products.map((product) => (
+              <li key={product.id} className="list-group-item">
+                {product.name} <span className="badge bg-secondary ms-2">${product.price.toFixed(2)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }
